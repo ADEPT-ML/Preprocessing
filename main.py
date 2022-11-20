@@ -33,7 +33,7 @@ def read_root():
 @app.post("/clean")
 def clean_data(payload: str = Body(..., embed=True)):
     buildings = pp.json_to_buildings(json.loads(payload))
-    # pp.merge_duplicate_sensors(data) <- not fully working yet
+    pp.merge_duplicate_sensors(buildings, 10)  # <- not fully working yet
     pp.remove_nan_dict(buildings)
     pp.remove_unwanted_rows(buildings, 10)
     pp.remove_leftover_sensors(buildings)

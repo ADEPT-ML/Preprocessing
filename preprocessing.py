@@ -75,10 +75,11 @@ def remove_empty_buildings(data: dict[str, Building]) -> dict[str, Building]:
     return {k: v for k, v in data.items() if len(v.sensors) > 0}
 
 
-def merge_duplicate_sensors(data: dict[str, Building]) -> None:
+def merge_duplicate_sensors(data: dict[str, Building], threshold: int) -> None:
     """Merges sensors with identical data.
 
     :param data: A dictionary of buildings
+    :param threshold: The threshold for the allowed amount of value mismatches between two similar sensor lists
     """
     for _, building in data.items():
         keys = []
@@ -89,17 +90,15 @@ def merge_duplicate_sensors(data: dict[str, Building]) -> None:
             local_list = [e for e in building.dataframe[keys[i]] if e == e]
             for j in range(i + 1, len(keys)):
                 local_list_two = [e for e in building.dataframe[keys[j]] if e == e]
-                if len(local_list) != local_list_two:
+                if len(local_list) != len(local_list_two):
                     continue
                 if local_list == local_list_two:
                     marked_for_deletion.add(keys[j])
                 else:
-                    if building.name == "EF 40a":
-                        print("Comparing", keys[i], keys[j])
-                        diff_entries = [(local_list[c], local_list_two[c]) for c in range(len(local_list)) if
-                                        local_list[c] != local_list_two[c]]
-                        if len(diff_entries) < 100:
-                            print(diff_entries)
+                    diff_entries = [(local_list[c], local_list_two[c]) for c in range(len(local_list)) if
+                                    local_list[c] != local_list_two[c]]
+                    if len(diff_entries) < threshold:
+                        marked_for_deletion.add(keys[j])
         for key in marked_for_deletion:
             building.dataframe.drop(columns=key, inplace=True)
 
