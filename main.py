@@ -1,6 +1,6 @@
 import dataclasses
 import json
-import preprocessing as pp
+import src.preprocessing as pp
 import pandas
 
 from fastapi import FastAPI, Body

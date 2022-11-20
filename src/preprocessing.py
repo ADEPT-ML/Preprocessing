@@ -122,7 +122,7 @@ def min_max_normalization(df) -> pd.DataFrame:
 
 
 def mean_normalization(df) -> pd.DataFrame:
-    """Normalizes all data in the dataframe into a stadard score.
+    """Normalizes all data in the dataframe into a standard score.
 
     :param df: The dataframe to normalize
     :return: The normalized dataframe
