@@ -7,6 +7,7 @@ import json
 @dataclass
 class Building:
     """Contains all information of a building"""
+
     @dataclass
     class Sensor:
         """Contains all information to describe a sensor"""
@@ -20,10 +21,13 @@ class Building:
 
 
 def json_to_buildings(data: dict) -> dict:
-    """Converts a json representation of a building into a building object.
+    """Converts a JSON representation of buildings into building objects.
 
-    :param data: A json representation of a building
-    :return: The building object
+    Args:
+        data: The JSON representation of building objects.
+
+    Returns:
+        The building objects that were converted from the JSON representation.
     """
     buildings = dict()
     for k, b in data.items():
@@ -36,9 +40,10 @@ def json_to_buildings(data: dict) -> dict:
 
 
 def interpolate_dict(data: dict[str, Building]) -> None:
-    """Interpolates all missing values in the sensor data sets.
+    """Interpolates all missing values in the sensor data sets using a linear approach.
 
-    :param data: A dictionary of buildings
+    Args:
+        data: A dictionary of buildings
     """
     for _, building in data.items():
         building.dataframe.interpolate(method='linear', limit_direction='both', inplace=True)
@@ -47,7 +52,8 @@ def interpolate_dict(data: dict[str, Building]) -> None:
 def remove_nan_dict(data: dict[str, Building]) -> None:
     """Removes all sensor data sets with only NaN values.
 
-    :param data: A dictionary of buildings
+    Args:
+        data: A dictionary of buildings
     """
     for _, building in data.items():
         building.dataframe.dropna(axis=1, how="all", inplace=True)
@@ -56,8 +62,9 @@ def remove_nan_dict(data: dict[str, Building]) -> None:
 def remove_unwanted_rows(data: dict[str, Building], threshold: int) -> None:
     """Removes all sensor data sets with less unique values than the given threshold.
 
-    :param data: A dictionary of buildings
-    :param threshold: The minimum amount of unique values
+    Args:
+        data: A dictionary of buildings
+        threshold: The minimum amount of unique values
     """
     for _, building in data.items():
         for key in building.dataframe:
@@ -69,8 +76,11 @@ def remove_unwanted_rows(data: dict[str, Building], threshold: int) -> None:
 def remove_empty_buildings(data: dict[str, Building]) -> dict[str, Building]:
     """Removes all buildings that have no sensor data.
 
-    :param data: A dictionary of buildings
-    :return: The dictionary without the removed buildings
+    Args:
+        data: A dictionary of buildings
+
+    Returns:
+        The dictionary without the removed buildings
     """
     return {k: v for k, v in data.items() if len(v.sensors) > 0}
 
@@ -78,8 +88,9 @@ def remove_empty_buildings(data: dict[str, Building]) -> dict[str, Building]:
 def merge_duplicate_sensors(data: dict[str, Building], threshold: int) -> None:
     """Merges sensors with identical data.
 
-    :param data: A dictionary of buildings
-    :param threshold: The threshold for the allowed amount of value mismatches between two similar sensor lists
+    Args:
+        data: A dictionary of buildings
+        threshold: The threshold for the allowed amount of value mismatches between two similar sensor lists
     """
     for _, building in data.items():
         keys = []
@@ -106,25 +117,32 @@ def merge_duplicate_sensors(data: dict[str, Building], threshold: int) -> None:
 def remove_leftover_sensors(data: dict[str, Building]) -> None:
     """Removes all sensors from the given buildings that do not have data.
 
-    :param data: A dictionary of buildings
+    Args:
+        data: A dictionary of buildings
     """
     for _, building in data.items():
         building.sensors = [s for s in building.sensors if s.type in building.dataframe.keys()]
 
 
-def min_max_normalization(df) -> pd.DataFrame:
+def min_max_normalization(df: pd.DataFrame) -> pd.DataFrame:
     """Normalizes all data in the dataframe to a range from 0 to 1.
 
-    :param df: The dataframe to normalize
-    :return: The normalized dataframe
+    Args:
+        df: The dataframe to be normalized
+
+    Returns:
+        The normalized dataframe
     """
     return (df - df.min()) / (df.max() - df.min())
 
 
-def mean_normalization(df) -> pd.DataFrame:
+def mean_normalization(df: pd.DataFrame) -> pd.DataFrame:
     """Normalizes all data in the dataframe into a standard score.
 
-    :param df: The dataframe to normalize
-    :return: The normalized dataframe
+    Args:
+        df: The dataframe to be normalized
+
+    Returns:
+        The normalized dataframe
     """
     return (df - df.mean()) / df.std()
