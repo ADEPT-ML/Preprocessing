@@ -2,6 +2,7 @@
 import dataclasses
 import json
 import src.preprocessing as pp
+from src import schema
 import pandas
 
 from fastapi import FastAPI, Body
@@ -115,3 +116,6 @@ def interpolate_data(payload: str = Body(..., embed=True)):
     pp.interpolate_dict(buildings)
 
     return json.dumps(buildings, cls=JSONEncoder)
+
+
+schema.custom_openapi(app)
