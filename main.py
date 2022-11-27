@@ -42,7 +42,29 @@ class JSONEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-@app.get("/")
+@app.get(
+    "/",
+    name="Root path",
+    summary="Returns the routes available through the API",
+    description="Returns a route list for easier use of API through HATEOAS",
+    response_description="List of urls to all available routes",
+    responses={
+        200: {
+            "content": {
+                "application/json": {
+                    "example": {
+                        "payload": [
+                            {
+                                "path": "/examplePath",
+                                "name": "example route"
+                            }
+                        ]
+                    }
+                }
+            },
+        }
+    }
+)
 async def root():
     """Root API endpoint that lists all available API endpoints.
 
