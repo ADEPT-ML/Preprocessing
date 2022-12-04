@@ -1,23 +1,14 @@
 """The main module with all API definitions of the Preprocessing service"""
+from fastapi import FastAPI, Body
 import dataclasses
 import json
-import src.preprocessing as pp
-from src import schema
 import pandas
 
-from fastapi import FastAPI, Body
-# from fastapi.middleware.cors import CORSMiddleware
+import src.preprocessing as pp
+from src import schema
+
 
 app = FastAPI()
-# origins = ["*"]
-#
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
 
 
 class JSONEncoder(json.JSONEncoder):
