@@ -122,27 +122,3 @@ def remove_leftover_sensors(data: dict[str, Building]) -> None:
     """
     for _, building in data.items():
         building.sensors = [s for s in building.sensors if s.type in building.dataframe.keys()]
-
-
-def min_max_normalization(df: pd.DataFrame) -> pd.DataFrame:
-    """Normalizes all data in the dataframe to a range from 0 to 1.
-
-    Args:
-        df: The dataframe to be normalized
-
-    Returns:
-        The normalized dataframe
-    """
-    return (df - df.min()) / (df.max() - df.min())
-
-
-def mean_normalization(df: pd.DataFrame) -> pd.DataFrame:
-    """Normalizes all data in the dataframe into a standard score.
-
-    Args:
-        df: The dataframe to be normalized
-
-    Returns:
-        The normalized dataframe
-    """
-    return (df - df.mean()) / df.std()
