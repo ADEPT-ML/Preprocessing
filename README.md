@@ -4,7 +4,7 @@ The service is responsible for (pre-)processing all building data available to A
 
 ## Requirements
 
-+ Python >3.10
++ Python ≥ 3.10
 + All packages from requirements.txt
 
 ## Development
@@ -23,4 +23,11 @@ uvicorn main:app --reload
 
 We provide a docker-compose in the root directory of ADEPT to start all services bundled together.
 
-Copyright © ADEPT ML, TU Dortmund 2022
+
+### Adding functionality
+
+Please refer to the section
+on [adding functionality](https://github.com/Adept-ML/Data-Management/tree/main#adding-functionality) in the
+Data-Management-Service, as this service is directly dependent on it.
+
+Copyright © ADEPT ML, TU Dortmund 2023
